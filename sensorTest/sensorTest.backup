@@ -1,0 +1,207 @@
+#include <Sparki.h>
+
+const long runTests = 100000;
+
+const bool DEBUGIT = true;
+const bool testAccelerator = true;
+const bool testBottomInfrared = false;
+const bool testLights = false;
+const bool testMagnetometer = false;
+const bool testMove = false;
+const bool testUltrasonic = false;
+const int serialDelay = 100;
+const unsigned long serialSpeed = 19200;
+
+unsigned long startTime;
+unsigned long elapsedTime;
+int ultrasonicAngle;
+int testIterations = 0;
+unsigned long maxRunTimeInMillis = 180000;
+
+void setup() {
+  // put your setup code here, to run once:
+  //setUltrasonicAngle(0);
+  
+  Serial.begin(serialSpeed);
+  delay(1000);
+
+  startTime = millis();
+}
+
+void setUltrasonicAngle(int theAngle) {
+  ultrasonicAngle = theAngle;
+  sparki.servo(ultrasonicAngle);
+}
+
+
+void accelTest() {
+  elapsedTime = millis() - startTime;
+  // The z axis is -9.8 at rest, it's m/sec squared (gravity)
+  float x  = sparki.accelX();   // measure the accelerometer x-axis
+  float y  = sparki.accelY();   // measure the accelerometer y-axis
+  float z  = sparki.accelZ();   // measure the accelerometer z-axis
+  Serial.print(elapsedTime);
+  Serial.print(",ACCELEROMETER,x,");
+  Serial.print(x);
+  Serial.print(",y,");
+  Serial.print(y);
+  Serial.print(",z,");
+  Serial.println(z);
+  delay(serialDelay);
+}
+
+void bottomInfraredTest() {
+  elapsedTime = millis() - startTime;
+
+  // Note 1000 is bright white, 400 is dark, 200 or below is off the edge.
+  int edgeLeft   = sparki.edgeLeft();   // measure the left edge IR sensor
+  int lineLeft   = sparki.lineLeft();   // measure the left IR sensor
+  int lineCenter = sparki.lineCenter(); // measure the center IR sensor
+  int lineRight  = sparki.lineRight();  // measure the right IR sensor
+  int edgeRight  = sparki.edgeRight();  // measure the right edge IR sensor
+
+  Serial.print(elapsedTime);
+  Serial.print(",BOTTOMINFRARED,edgeLeft,");
+  Serial.print(edgeLeft);
+  Serial.print(",lineLeft,");
+  Serial.print(lineLeft);
+  Serial.print(",lineCenter,");
+  Serial.print(lineCenter); 
+  Serial.print(",lineRight,");
+  Serial.print(lineRight); 
+  Serial.print(",edgeRight,");
+  Serial.println(edgeRight);
+  delay(serialDelay);
+}
+
+void lightTest() {
+  elapsedTime = millis() - startTime;
+  // Each sensor is slightly different, the higher the number the
+  // brighter the light
+  int lightLeft   = sparki.lightLeft();
+  int lightCenter = sparki.lightCenter();
+  int lightRight  = sparki.lightRight();
+  Serial.print(elapsedTime);
+  Serial.print(",LIGHT,lightLeft,");
+  Serial.print(lightLeft);
+  Serial.print(",lightCneter,");
+  Serial.print(lightCenter);
+  Serial.print(",lightRight,");
+  Serial.println(lightRight);
+  delay(serialDelay);
+}
+
+void magnetometerTest() {
+  elapsedTime = millis() - startTime;
+  // magnetometer, x is left/right movement, y is foward/backward and z is up/down
+  float x  = sparki.magX();   // measure the accelerometer x-axis
+  float y  = sparki.magY();   // measure the accelerometer y-axis
+  float z  = sparki.magZ();   // measure the accelerometer z-axis
+  Serial.print(elapsedTime);
+  Serial.print(",MAGNETOMETER,x,");
+  Serial.print(x);
+  Serial.print(",y,");
+  Serial.print(y);
+  Serial.print(",z,");
+  Serial.println(z);
+  delay(serialDelay);
+}
+
+void moveTest(bool forward, int distanceInCM) {
+  elapsedTime = millis() - startTime;
+  Serial.print(elapsedTime);
+  Serial.print(",MOVE,");
+  if (forward)
+    Serial.print("forward,distance,");
+  else
+    Serial.print("backward,distance,");
+    
+  Serial.print(distanceInCM);
+  Serial.println(",cm");
+  
+  if (forward)
+    sparki.moveForward(distanceInCM);
+  else
+    sparki.moveBackward(distanceInCM);
+  //delay(1000);
+  //sparki.moveStop();
+
+  // sparki.moveLeft(degrees);
+  // sparki.moveRight(degrees);  
+  // sparki.moveStop();  // stop it
+  delay(serialDelay);
+}
+
+
+void ultrasonicTest() {
+  elapsedTime = millis() - startTime;
+  int cm = sparki.ping(); // measures the distance with Sparki's eyes in cm
+  Serial.print(elapsedTime);
+  Serial.print(",ULTRASONIC,cm,");
+  Serial.print(cm);
+  Serial.print(",angle,");
+  Serial.println(ultrasonicAngle);
+  delay(serialDelay);
+
+  //sparki.print("ultrasonicTest: ");
+  //sparki.print(cm);
+  //sparki.println(" cm");
+  //sparki.updateLCD();
+}
+
+
+void loop() {
+  if (DEBUGIT) {
+    sparki.clearLCD();
+    sparki.print("testIterations: ");
+    sparki.println(testIterations);
+    sparki.print("runTests: ");
+    sparki.println(runTests);
+    sparki.updateLCD();
+  }
+  if ((testIterations < runTests) && ((millis() - startTime) < maxRunTimeInMillis)) {
+    if (testIterations == 0) {
+      sparki.beep();
+      sparki.clearLCD();
+      sparki.println("Connect program in 5 seconds");
+      sparki.updateLCD();
+      delay(5000);
+      sparki.clearLCD();
+      sparki.println("Started");
+      sparki.updateLCD();
+      sparki.beep();
+    }
+    
+    //sparki.moveForward(3);
+    //delay(10000);
+    
+    testIterations++;
+    // put your main code here, to run repeatedly:
+    if (testAccelerator) 
+      accelTest();
+    if (testBottomInfrared)
+      bottomInfraredTest();
+    if (testLights)
+      lightTest();
+    if (testMagnetometer)
+      magnetometerTest();
+    if (testMove)
+      moveTest(true, 10);  // Forward 10 cm (~4")
+    if (testUltrasonic)
+      ultrasonicTest();
+    
+  }
+//  Serial.print("In main loop. ");
+//  Serial.print("Start time: ");
+//  Serial.print(startTime);
+//  Serial.print(", ultraAngle is: ");
+//  Serial.print(ultrasonicAngle);
+//  Serial.print(", testIterations is: ");
+//  Serial.print(testIterations);
+//  Serial.println(". ");
+//  delay(8);
+  
+  //sparki.print("loop: ");
+  //sparki.println(testIterations);
+  //sparki.updateLCD();
+}
