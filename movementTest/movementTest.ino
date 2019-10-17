@@ -70,6 +70,21 @@ void moveForwardBasedOnTime(float distanceInCM) {
   Serial.println(" Leaving moveForwardBasedOnTime");  
 }
 
+float moveForwardTillCloseToObstacle(byte howClose) {
+
+  
+
+  
+}
+
+
+
+
+
+
+
+
+
 void moveBackAndForth(byte distanceInCM) {
   Serial.print(getElapsed(true));
   Serial.print("Starting moveBackAndForth, distance");
@@ -138,7 +153,7 @@ void loop() {
     }
 
     if (true == true) {
-      moveForwardBasedOnTime(11.0);
+      moveForwardBasedOnTime(25.4);  // 10 inches
     }
 
     // Move forward and backward N cm

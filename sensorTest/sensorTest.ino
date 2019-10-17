@@ -1,6 +1,8 @@
 #include <Sparki.h>
 const bool DEBUGIT = false;
 
+const float cmPerSec = 2.78;  // How fast sparki travels
+
 const byte ACCEL = 0;
 const byte BOTT = 1;
 const byte LIGHT = 2;
@@ -11,6 +13,8 @@ const byte NUMSENSORS = 6;
 
 // How many tests to run
 const unsigned int runTests = 10000;
+
+const bool STOPAFTERMOVEMENTCOMPLETES = true;
 
 // Max run time in seconds
 const int runTimeInSeconds = 6000;
@@ -30,6 +34,9 @@ unsigned long currMillis;
 
 byte ultrasonicAngle;
 int testIterations = 0;
+bool amMoving = false;
+unsigned int timeInMillisToGetThere;
+bool continueTests = true;  // Can set this at various points to stop tests
 
 struct sensors {
   unsigned long lastMillis;
@@ -51,8 +58,8 @@ void initIt() {
   sparkiSensors[BOTT].shouldRun = true;
   sparkiSensors[LIGHT].shouldRun = true;
   sparkiSensors[MAGNE].shouldRun = true;
-  // sparkiSensors[MOVE].shouldRun = true;
-  // sparkiSensors[ULTRA].shouldRun = true;
+  sparkiSensors[MOVE].shouldRun = true;
+  sparkiSensors[ULTRA].shouldRun = true;
 }
 
 // ------------------------------------------------------------------------
@@ -173,6 +180,44 @@ void moveTest(bool forward, int distanceInCM) {
 }
 
 // ------------------------------------------------------------------------
+void moveTestNonBlocking(bool forward, int distanceInCM) {
+  currMillis  = millis();
+
+  // If not currenting moving then calculate time to get to distance,
+  // set the lastMillis to be the current time and move :)
+  if (amMoving == false) {
+    timeInMillisToGetThere = (distanceInCM / cmPerSec) * 1000;
+    sparkiSensors[MOVE].lastMillis = currMillis;
+    if (forward)
+      sparki.moveForward();
+    else
+      sparki.moveBackward();
+    amMoving = true;
+  }
+  
+  elapsedTime = currMillis - sparkiSensors[MOVE].lastMillis;
+  Serial.print(elapsedTime);
+  Serial.print(",MOVE,");
+  if (forward)
+    Serial.print("forward,distanceSoFar,");
+  else
+    Serial.print("backward,distanceSoFar,");
+    
+  Serial.print((elapsedTime*cmPerSec)/1000.0);
+  Serial.println(",cm");
+  
+  // See if we're done moving... basically the time to get there has elapsed
+  if (elapsedTime >= timeInMillisToGetThere) {
+    sparki.moveStop();  // stop it  
+    amMoving = false;
+    if (STOPAFTERMOVEMENTCOMPLETES)
+      continueTests = false;
+  }
+  delay(serialDelay);
+}
+
+
+// ------------------------------------------------------------------------
 void setup() {
   // put your setup code here, to run once:
   setUltrasonicAngle(0);
@@ -230,7 +275,7 @@ void loop() {
     delay(5000);
   }
   
-  if ((testIterations < runTests) && ((millis() - startTime) < maxRunTimeInMillis)) {
+  if ((testIterations < runTests) && ((millis() - startTime) < maxRunTimeInMillis)  && continueTests) {
     if (testIterations == 0) {
       // Put message on lcd to connect to serial port
       sparki.beep();
@@ -263,12 +308,17 @@ void loop() {
     }
       
     if (sparkiSensors[MOVE].shouldRun) {
-      moveTest(true, 10);  // Forward 10 cm (~4")
+      // moveTest(true, 10);  // Forward 10 cm (~4")
+      moveTestNonBlocking(true, 43);
     }
    
     if (sparkiSensors[ULTRA].shouldRun) {
       ultrasonicTest();
     }
     
+  }
+  else {
+    Serial.println("DONE");
+    delay(10000);  // delay 10 seconds
   }
 }
