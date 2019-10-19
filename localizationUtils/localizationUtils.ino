@@ -8,8 +8,6 @@ void setup() {
   setCurrentLocalizationValues(10.0, 2.0, 15.0);
 }
 
-
-
 void loop() {
   // put your main code here, to run repeatedly:
   if (counter == 0) {
