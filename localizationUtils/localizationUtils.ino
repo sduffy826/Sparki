@@ -1,6 +1,9 @@
 #include <Sparki.h>
 #include "localizationCommon.h"
 
+// Little test program to show localization routines, the meat is in the
+// include file (localizationCommon.h)
+
 byte counter = 0;
 
 void setup() {
@@ -17,16 +20,24 @@ void loop() {
 
     // Set new location
     setCurrentLocalizationValues(newX, newY, calculateRealAngleWithAdjustment(20.0));  
-    showLoc();
+    showLocation();
     delay(5000);
-    counter++;
-
+    
     // Show another call, we'll move do it another way
     setCurrentLocalizationValues(20.0, 4.0, 15.0);
     setNewPosition(4.9, 20.0);  
-    showLoc();
-    
-    
+    showLocation();
+
+    // Test it with negative, we're currently at 35 degrees 
+    float minAngle = getShortestAngleDeltaToGetToOrientation(315);
+    sparki.clearLCD();
+    sparki.println("From 35 to 315, min angle is:");
+    sparki.println(minAngle);
+    sparki.updateLCD();
+    setNewPosition(0,minAngle);
+    showLocation();
+
+    counter++;
   }
 }
 

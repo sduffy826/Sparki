@@ -10,6 +10,11 @@ unsigned int elapsed;
 unsigned int currMillis;
 
 
+// Used this program to determine how fast the sparki was and the error in distance
+// Basically used the moveForward routine, got the results into spreadsheet (so had the
+// elapsed time), I measured the actual distance and then divided it by the time to come
+// up with the cmPerSec
+// --------------------------------------------------------------------------------------
 void setup() {
   // put your setup code here, to run once:
   startTime = millis();
@@ -76,13 +81,6 @@ float moveForwardTillCloseToObstacle(byte howClose) {
 
   
 }
-
-
-
-
-
-
-
 
 
 void moveBackAndForth(byte distanceInCM) {

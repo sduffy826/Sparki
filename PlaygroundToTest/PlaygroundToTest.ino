@@ -18,17 +18,18 @@ void loop() {
   // put your main code here, to run repeatedly:
   if (count == 0) {
     count++;
-    float theAngle = 405.10;
-  
+    if (true == false) {
+      float theAngle = 405.10;
 
-    sparki.clearLCD(); // wipe the LCD clear
-    sparki.print("Mod of angle: ");
-    sparki.print(theAngle);
-    sparki.print(" is: ");
-    float test = modAngle(theAngle);
-    sparki.println(test);
-    sparki.updateLCD(); // put the drawings on the screen
-  
+      sparki.clearLCD(); // wipe the LCD clear
+      sparki.print("Mod of angle: ");
+      sparki.print(theAngle);
+      sparki.print(" is: ");
+      float test = modAngle(theAngle);
+      sparki.println(test);
+      sparki.updateLCD(); // put the drawings on the screen
+    }
+    sparki.moveRight(90);
   }
 }
   
