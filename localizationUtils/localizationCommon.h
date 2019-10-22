@@ -30,6 +30,14 @@ float getCurrentXPosition() {
   return lastXPosition;
 }
 
+int getCurrentXPositionInMM() {
+  return (int)(lastXPosition*10);
+}
+
+int getCurrentXPositionInCM() {
+  return (int)(lastXPosition+.5);
+}
+
 void setCurrentYPosition(float y) {
   lastYPosition = y;
 }
@@ -38,6 +46,13 @@ float getCurrentYPosition() {
   return lastYPosition;
 }
 
+int getCurrentYPositionInMM() {
+  return (int)(lastYPosition*10);
+}
+
+int getCurrentYPositionInCM() {
+  return (int)(lastYPosition+.5);
+}
 float degreesToRadians(float degrees) {
   return (degrees * (PI / 180.0));
 }

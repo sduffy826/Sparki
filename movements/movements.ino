@@ -1,9 +1,11 @@
 #include <Sparki.h>
 #include "sparkiCommon.h"
+
 #include "localizationCommon.h"
 #include "determineWorld.h"
+#include "movements.h"
 
-byte counter = 0;
+byte counter;
 
 void setup() {
   // put your setup code here, to run once:
@@ -16,13 +18,26 @@ void setup() {
     delay(DELAY_AFTER_SERIAL_STARTUP);  
     sparki.beep();
   #endif
+  counter = 0;
 }
 
 void loop() {
   // Just want to test once :)
   if (counter == 0) {
-    // routine below has the logic to calculate our rectangular world coordinates
-    calculateRectangularCoordinates();
+    if (true == true) {
+      // routine below has the logic to calculate our rectangular world coordinates
+      initMovements();
+      followWall();
+    }
+
+    if (true == false) {
+      showTurnRadius();
+    }
+
+    if (true == false) {
+      turnRight(90);
+    }
+    
     counter++;
   }
 }

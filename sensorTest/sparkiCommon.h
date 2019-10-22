@@ -3,16 +3,19 @@
 
 #define USE_LCD false
 
-// Ultrasound position info
-#define ULTRASOUND_FORWARD_OF_CENTER 4.2
-#define ULTRASOUND_BEHIND_FRONT 1.3
+// Ultrasonic position info
+#define ULTRASONIC_FORWARD_OF_CENTER 4.2
+#define ULTRASONIC_BEHIND_FRONT 1.3
 
-// Adjustment for ultrasound servo to have it at position 0
+// Adjustment for Ultrasonic servo to have it at position 0
 // (mine was 5 degrees off)
-#define ULTRASOUND_SERVO_ANGLE_ADJUSTMENT 5
+#define ULTRASONIC_SERVO_ANGLE_ADJUSTMENT 5
 
-// Max effective range of ultrasound 6 feet (~183cm)
-#define ULTRASOUND_MAX_RANGE 183
+// Max effective range of ULTRASONIC 6 feet (~183cm)
+#define ULTRASONIC_MAX_RANGE 183
+
+// Min safe approach distance
+#define ULTRASONIC_MIN_SAFE_DISTANCE 6
 
 // Gripper characterisitics
 #define GRIPPER_LENGTH 2.6
@@ -25,11 +28,15 @@
 // so the nose length is equal to it's tail :)
 #define OVERALL_WIDTH 10.5
 #define OVERALL_LENGTH_LESS_GRIPPER 11.28
+#define TURN_RADIUS (OVERALL_LENGTH_LESS_GRIPPER / 2.0) + GRIPPER_LENGTH
 
-// When taking ultrasound measurements it's the sample size to use and
+// When taking Ultrasonic measurements it's the sample size to use and
 // the delay between them
-#define ULTRASOUND_SAMPLE_DELAY 5
-#define ULTRASOUND_SAMPLE_SIZE 3
+#define ULTRASONIC_SAMPLE_DELAY 5
+#define ULTRASONIC_SAMPLE_SIZE 3
+#define ULTRASONIC_DELAY_AFTER_SERVO_MOVEMENT 200
+#define ULTRASONIC_RIGHT_ANGLE 85
+#define ULTRASONIC_LEFT_ANGLE -85
 
 // Amount to delay after movement
 #define DELAY_AFTER_MOVEMENT 100
@@ -42,6 +49,9 @@
 // Amount to delay after serial device is initialized, this gives you time
 // to connect monitor/program
 #define DELAY_AFTER_SERIAL_STARTUP 10000
+
+// Wall to follow, right (true), left false
+#define FOLLOW_RIGHT_WALL true
 
 // This is the world dimensions... due to memory limitations we assume it's
 // rectangular
