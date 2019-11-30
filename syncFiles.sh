@@ -4,7 +4,10 @@
 rsync -av localizationUtils/localizationCommon.h determineWorld/
 rsync -av localizationUtils/localizationCommon.h movements/
 rsync -av localizationUtils/localizationCommon.h lights/
+rsync -av localizationUtils/localizationCommon.h PlaygroundToTest/
 
+# copy the movements/movements.h into paths
+rsync -av movements/movements.h lights/
 
 # copy the determineWorld.h into the appropriate paths
 rsync -av determineWorld/determineWorld.h movements/
@@ -23,3 +26,4 @@ rsync -av SparkiCommon/sparkiCommon.h localizationUtils/
 rsync -av SparkiCommon/sparkiCommon.h movements/
 rsync -av SparkiCommon/sparkiCommon.h ultrasonic/
 rsync -av SparkiCommon/sparkiCommon.h lights/
+rsync -av SparkiCommon/sparkiCommon.h PlaygroundToTest/

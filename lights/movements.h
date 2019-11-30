@@ -95,6 +95,36 @@ void turnRight(byte degrees) {
   setCurrentAngle(calculateRealAngleWithAdjustment(-(float)degrees));
 }
 
+int getClosest90Angle() {
+  return ((((int)(getCurrentAngle()+44)/90)*90)%360);
+}
+
+void turnToAngle(int theAngle) {
+  int shortestPath = (int)getShortestAngleDeltaToGetToOrientation((float)theAngle);
+  if (shortestPath < 0) {
+    turnRight(-shortestPath);
+  }
+  else {
+    turnLeft(shortestPath);
+  }
+}
+
+// Turn to specific angle and return distance in front of you :)
+int getDistanceAtAngle(int angle) {
+  turnToAngle(angle);
+  return distanceAtAngle(0);
+}
+
+// Convenience routine
+void turnToZero() {
+  turnToAngle(0);
+}
+
+// Another convenience routine
+void turnTo90ClosestDegreeOrientation() {
+  turnToAngle(getClosest90Angle());
+}
+
 // -------------------------- 
 // Right now it only moves to the left, need to make
 // it smart enough to turn right too

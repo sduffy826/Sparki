@@ -1,6 +1,7 @@
 #include <Sparki.h>
 #include "sparkiCommon.h"
-
+#include "ultrasonicCommon.h"
+#include "determineWorld.h"
 #include "lights.h"
 
 byte counter;
@@ -22,9 +23,32 @@ void setup() {
 void loop() {
   // Just want to test once :)
   if (counter == 0) {
+    // Make sure the servo isn't blocking a light
+    positionServo(0);
+  
+    // Calculate world
+    calculateRectangularCoordinates();
+    
+    sampleWorldLights();
+    sparki.beep();
+    delay(2000);
+
     if (true == true) {
-      // routine below has the logic to calculate our rectangular world coordinates
-      sampleWorld();
+      setPotentialLightTargets();
+    }
+    
+    if (true == false) {
+    
+      // Test this it aint working as expected
+      calculateLightDeltas();
+      int theAngle = getAngleWithHighestLightDelta(-1,-1);  // Use invalid angle to not ignore
+      showLightDirection(theAngle);
+
+      // Get the next brightest
+      theAngle = getAngleWithHighestLightDelta(getAngle(theAngle-90),getAngle(theAngle+90));
+      showLightDirection(theAngle);
+
+      
     }
     counter++;
   }

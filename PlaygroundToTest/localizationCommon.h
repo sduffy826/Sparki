@@ -114,6 +114,8 @@ void setNewPosition(float distance, float angleDelta) {
 }
 
 float getShortestAngleDeltaToGetToOrientation(float targetOrientation) {
+  // Check this, had to reverse signs ...
+  
   // This returns the shortest angle to get from currentAngleOrientation to a target orientation
   // The value returned will be + for normal rotation (left/ccw), it'll be negative for 
   // right/ccw rotation.
@@ -123,14 +125,14 @@ float getShortestAngleDeltaToGetToOrientation(float targetOrientation) {
   // The delta of targetOrientation - currentAngle is the degrees moving in right rotation (cw)
   if (targetOrientation - getCurrentAngle() < -180.0) {
     // if less than -180.0 then add 360' to it, this will be + angles (moving ccw)
-    return (360.0 + (targetOrientation - getCurrentAngle()));
+    return -(360.0 + (targetOrientation - getCurrentAngle()));
   }
   else if (targetOrientation - getCurrentAngle() > 180.0) {
     // if more than 180' then subtract 360 from it, we'll move in negative direction (cw)
-    return -(360 - (targetOrientation - getCurrentAngle()));
+    return (360 - (targetOrientation - getCurrentAngle()));
   }
   else {
-    return (targetOrientation - getCurrentAngle());
+    return -(targetOrientation - getCurrentAngle());
   }
 }
  

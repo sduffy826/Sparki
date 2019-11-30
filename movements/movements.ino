@@ -24,7 +24,7 @@ void setup() {
 void loop() {
   // Just want to test once :)
   if (counter == 0) {
-    if (true == true) {
+    if (true == false) {
       // routine below has the logic to calculate our rectangular world coordinates
       initMovements();
       followWall();
@@ -36,6 +36,14 @@ void loop() {
 
     if (true == false) {
       turnRight(90);
+    }
+
+    if (true == true) {
+      turnRight(134);
+      delay(2000);
+      turnTo90ClosestDegreeOrientation();
+      delay(2000);
+      turnToZero();
     }
     
     counter++;

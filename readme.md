@@ -29,7 +29,8 @@ For now most of the stuff is play :)
 ## Code - for navigation/robot function
 - **SparkiCommon**: this has the .h file to be included in code; it defines constants for the sparki like: it's speed, dimensions, etc... you should put constants here (used define instead of const) to save memory.  When you update this run ./syncFiles.sh 
 - **localizationUtils**: this has code for localization, the main program is just a test.  The meat is in localizationCommon.h, (use ./syncFiles.sh after updates) the methods of interest in that are:
-  - **setCurrentLocalizationValues(x,y,angle)** this sets your current location and angle of orientation (orientation in the world)
+  - **setPose(x,y,angle)** this sets your current location and angle of orientation (orientation in the world)
+  - **getPose()** returns a structure (Pose) that has x, y and angle
   - **setNewPosition(distance, angleFromLastPosition)** you give it the distance you traveled and the angle from your last position and it calculates your new world model position.  Note that angle from last position is relative; lets say your prior position was at 10,3 and you were at a 10' angle.  If you traveled 5cm at a 20' angle, the 20' is relative angle to your last position, but your angle in the 'world' is 20' + last orientation angle (10), so it's 30'.  fyi, your new position is at 14.3,5.5
   - **getShortestAngleDeltaToGetToOrientation** you give this routine the real world angle orientation and it returns the shortest angle delta needed to point there... if the angle returned is negative then turn right, if positive turn left. 
   - **setCurrentAngle(angleInWorld)** use this to set your angle in the world
@@ -56,3 +57,8 @@ For now most of the stuff is play :)
 - **DW** Define world, world dimensions (x,y)
 - **DP** Define world, current position (x,y)
 - **LO** Localization, x position, y position, &lt; current angle
+- **LA** Light angle, has angle, brightness for left, center and right light sensor
+- **LB** Light brightness delta, shows the angle that has largest increase in brightness over the sample; it will ignore the quadrant if requested
+- **LBD** Light brightness delta for all angles, this is only shown if DEBUGLIGHT is on
+- **LBIR** Light brightness ignore angle range (only when DEBUGLIGHT is on)
+- **LBI** Light brightness, angle that is ignored in calculation (when looking for second light we ignore the area that we found the first one) (also only when DEBUGLIGHT is on)

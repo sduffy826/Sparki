@@ -8,7 +8,7 @@ byte counter = 0;
 
 void setup() {
   // put your setup code here, to run once:
-  setCurrentLocalizationValues(10.0, 2.0, 15.0);
+  setPose(10.0, 2.0, 15.0);
 }
 
 void loop() {
@@ -19,12 +19,12 @@ void loop() {
     float newY = calculateNewY(4.9, 20.0);
 
     // Set new location
-    setCurrentLocalizationValues(newX, newY, calculateRealAngleWithAdjustment(20.0));  
+    setPose(newX, newY, calculateRealAngleWithAdjustment(20.0));  
     showLocation();
     delay(5000);
     
     // Show another call, we'll move do it another way
-    setCurrentLocalizationValues(20.0, 4.0, 15.0);
+    setPose(20.0, 4.0, 15.0);
     setNewPosition(4.9, 20.0);  
     showLocation();
 
